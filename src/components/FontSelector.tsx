@@ -1,40 +1,9 @@
+import { fonts } from "../constants/Fonts";
+
 interface FontSelectorProps {
   selectedFont: string;
   onFontChange: (font: string) => void;
 }
-
-const fonts = [
-  {
-    name: "Roboto",
-    displayName: "Roboto",
-    description: "Clean and modern",
-  },
-  {
-    name: "Open Sans",
-    displayName: "Open Sans",
-    description: "Friendly and approachable",
-  },
-  {
-    name: "Montserrat",
-    displayName: "Montserrat",
-    description: "Contemporary sans-serif",
-  },
-  {
-    name: "Playfair Display",
-    displayName: "Playfair Display",
-    description: "Elegant serif",
-  },
-  {
-    name: "Lato",
-    displayName: "Lato",
-    description: "Balanced and modern",
-  },
-  {
-    name: "Merriweather",
-    displayName: "Merriweather",
-    description: "Classic serif",
-  },
-];
 
 export function FontSelector({
   selectedFont,
