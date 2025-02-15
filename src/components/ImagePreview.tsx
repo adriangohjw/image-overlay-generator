@@ -5,6 +5,7 @@ interface ImagePreviewProps {
   overlayText: string
   fontSize: string
   overlayOpacity: string
+  selectedFont: string
   wrappedLines: string[]
   onWrappedLinesChange: (lines: string[]) => void
   onDownload: () => void
@@ -15,6 +16,7 @@ export function ImagePreview({
   overlayText,
   fontSize,
   overlayOpacity,
+  selectedFont,
   wrappedLines,
   onWrappedLinesChange,
   onDownload,
@@ -55,7 +57,7 @@ export function ImagePreview({
       if (!ctx) return
 
       const calculatedFontSize = Math.floor(canvas.height * parseInt(fontSize) / 400)
-      ctx.font = `${calculatedFontSize}px Arial`
+      ctx.font = `${calculatedFontSize}px ${selectedFont}`
       
       const maxWidth = canvas.width * 0.8
       const lines = wrapText(ctx, overlayText, maxWidth)
@@ -67,7 +69,7 @@ export function ImagePreview({
     }
 
     img.onload = calculateWrappedLines
-  }, [overlayText, fontSize, selectedImage, onWrappedLinesChange])
+  }, [overlayText, fontSize, selectedFont, selectedImage, onWrappedLinesChange])
 
   return (
     <>
@@ -93,6 +95,7 @@ export function ImagePreview({
                 key={index}
                 style={{
                   fontSize: `${fontSize}px`,
+                  fontFamily: selectedFont,
                   color: '#FFFFFF',
                   lineHeight: '1.2',
                 }}

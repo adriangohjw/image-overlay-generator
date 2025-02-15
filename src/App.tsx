@@ -9,6 +9,7 @@ function App() {
   const [fontSize, setFontSize] = useState('24')
   const [wrappedLines, setWrappedLines] = useState<string[]>([])
   const [overlayOpacity, setOverlayOpacity] = useState('0.4')
+  const [selectedFont, setSelectedFont] = useState('Roboto')
 
   const handleDownload = () => {
     const canvas = document.createElement('canvas')
@@ -33,7 +34,7 @@ function App() {
       // Add text
       ctx.fillStyle = '#FFFFFF'
       const calculatedFontSize = Math.floor(canvas.height * parseInt(fontSize) / 400)
-      ctx.font = `${calculatedFontSize}px Arial`
+      ctx.font = `${calculatedFontSize}px ${selectedFont}`
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
@@ -70,9 +71,11 @@ function App() {
                   overlayText={overlayText}
                   fontSize={fontSize}
                   overlayOpacity={overlayOpacity}
+                  selectedFont={selectedFont}
                   onTextChange={setOverlayText}
                   onFontSizeChange={setFontSize}
                   onOpacityChange={setOverlayOpacity}
+                  onFontChange={setSelectedFont}
                 />
               </div>
 
@@ -82,6 +85,7 @@ function App() {
                   overlayText={overlayText}
                   fontSize={fontSize}
                   overlayOpacity={overlayOpacity}
+                  selectedFont={selectedFont}
                   wrappedLines={wrappedLines}
                   onWrappedLinesChange={setWrappedLines}
                   onDownload={handleDownload}

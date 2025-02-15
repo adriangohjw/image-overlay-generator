@@ -1,19 +1,25 @@
+import { FontSelector } from './FontSelector'
+
 interface TextControlsProps {
   overlayText: string
   fontSize: string
   overlayOpacity: string
+  selectedFont: string
   onTextChange: (text: string) => void
   onFontSizeChange: (size: string) => void
   onOpacityChange: (opacity: string) => void
+  onFontChange: (font: string) => void
 }
 
 export function TextControls({
   overlayText,
   fontSize,
   overlayOpacity,
+  selectedFont,
   onTextChange,
   onFontSizeChange,
   onOpacityChange,
+  onFontChange,
 }: TextControlsProps) {
   return (
     <>
@@ -29,6 +35,8 @@ export function TextControls({
           placeholder="Enter text to overlay"
         />
       </div>
+
+      <FontSelector selectedFont={selectedFont} onFontChange={onFontChange} />
 
       <div className="grid grid-cols-1 gap-4 mb-4">
         <div>
