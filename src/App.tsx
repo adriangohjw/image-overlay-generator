@@ -7,7 +7,7 @@ import { TextInput } from "./components/TextInput";
 import { FontSelector } from "./components/FontSelector";
 import { FontSizeControl } from "./components/FontSizeControl";
 import { OpacityControl } from "./components/OpacityControl";
-
+import { FeaturesShowcase } from "./components/FeaturesShowcase";
 function App() {
   const [selectedImage, setSelectedImage] = useState<string>(defaultImage);
   const [overlayText, setOverlayText] = useState(
@@ -24,6 +24,8 @@ function App() {
         <h1 className="text-3xl font-bold text-center mb-8">
           Image Text Overlay Generator
         </h1>
+
+        <FeaturesShowcase />
 
         <div className="bg-white rounded-lg shadow-lg p-5 md:p-6 mb-6">
           <div className="flex flex-col md:flex-row gap-6">
