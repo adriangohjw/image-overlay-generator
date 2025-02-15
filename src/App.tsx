@@ -1,10 +1,11 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, useRef } from 'react'
 
 function App() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [overlayText, setOverlayText] = useState('')
   const [fontSize, setFontSize] = useState('24')
   const [textColor, setTextColor] = useState('#FFFFFF')
+  const imageContainerRef = useRef<HTMLDivElement>(null)
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -16,6 +17,43 @@ function App() {
       }
       reader.readAsDataURL(e.target.files[0])
     }
+  }
+
+  const handleDownload = () => {
+    if (!imageContainerRef.current) return
+
+    const canvas = document.createElement('canvas')
+    const container = imageContainerRef.current
+    const img = container.querySelector('img')
+
+    if (!img) return
+
+    // Set canvas dimensions to match the image
+    canvas.width = img.naturalWidth
+    canvas.height = img.naturalHeight
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    // Draw the original image
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+    // Add semi-transparent black overlay
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    // Add text
+    ctx.fillStyle = textColor
+    ctx.font = `${Math.floor(canvas.height * parseInt(fontSize) / 400)}px Arial`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(overlayText, canvas.width / 2, canvas.height / 2)
+
+    // Create download link
+    const link = document.createElement('a')
+    link.download = 'edited-image.png'
+    link.href = canvas.toDataURL('image/png')
+    link.click()
   }
 
   return (
@@ -78,7 +116,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="relative w-full aspect-video">
+              <div className="relative w-full aspect-video" ref={imageContainerRef}>
                 <img
                   src={selectedImage}
                   alt="Uploaded"
@@ -95,6 +133,15 @@ function App() {
                     {overlayText}
                   </p>
                 </div>
+              </div>
+
+              <div className="mt-4">
+                <button
+                  onClick={handleDownload}
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors"
+                >
+                  Download Edited Image
+                </button>
               </div>
             </>
           )}
