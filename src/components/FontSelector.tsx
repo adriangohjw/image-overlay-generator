@@ -47,14 +47,14 @@ export function FontSelector({ selectedFont, onFontChange }: FontSelectorProps) 
           <button
             key={font.name}
             onClick={() => onFontChange(font.name)}
-            className={`p-3 rounded-lg border transition-all ${
+            className={`flex flex-col items-center justify-center gap-1 p-3 rounded-lg border transition-all ${
               selectedFont === font.name
                 ? 'border-blue-500 bg-blue-50'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
             <div
-              className="text-lg mb-1"
+              className="text-md md:text-lg"
               style={{ fontFamily: font.name }}
             >
               {font.displayName}
