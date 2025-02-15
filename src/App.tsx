@@ -32,24 +32,22 @@ function App() {
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex flex-col gap-4 w-full md:w-1/3">
               <ImageUpload onImageUpload={setSelectedImage} />
-              <div className="space-y-4">
-                <TextInput
-                  overlayText={overlayText}
-                  onTextChange={setOverlayText}
-                />
-                <FontSelector
-                  selectedFont={selectedFont}
-                  onFontChange={setSelectedFont}
-                />
-                <FontSizeControl
-                  fontSize={fontSize}
-                  onFontSizeChange={setFontSize}
-                />
-                <OpacityControl
-                  overlayOpacity={overlayOpacity}
-                  onOpacityChange={setOverlayOpacity}
-                />
-              </div>
+              <TextInput
+                overlayText={overlayText}
+                onTextChange={setOverlayText}
+              />
+              <FontSelector
+                selectedFont={selectedFont}
+                onFontChange={setSelectedFont}
+              />
+              <FontSizeControl
+                fontSize={fontSize}
+                onFontSizeChange={setFontSize}
+              />
+              <OpacityControl
+                overlayOpacity={overlayOpacity}
+                onOpacityChange={setOverlayOpacity}
+              />
             </div>
 
             <div className="w-full md:w-2/3">
