@@ -91,15 +91,16 @@ function App() {
               <div className="grid grid-cols-1 gap-4 mb-4">
                 <div>
                   <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Font Size (px)
+                    Font Size: {fontSize}px
                   </label>
                   <input
-                    type="number"
+                    type="range"
                     value={fontSize}
                     onChange={(e) => setFontSize(e.target.value)}
-                    className="w-full p-2 border rounded"
+                    className="w-full"
                     min="12"
                     max="72"
+                    step="1"
                   />
                 </div>
               </div>
