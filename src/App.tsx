@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { ImageUpload } from "./components/ImageUpload";
-import { TextControls } from "./components/TextControls";
 import { ImagePreview } from "./components/ImagePreview";
 import defaultImage from "./assets/default-image.png";
 import { fonts } from "./constants/Fonts";
+import { TextInput } from "./components/TextInput";
+import { FontSelector } from "./components/FontSelector";
+import { FontSizeControl } from "./components/FontSizeControl";
+import { OpacityControl } from "./components/OpacityControl";
 
 function App() {
   const [selectedImage, setSelectedImage] = useState<string>(defaultImage);
@@ -26,16 +29,24 @@ function App() {
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex flex-col gap-4 w-full md:w-1/3">
               <ImageUpload onImageUpload={setSelectedImage} />
-              <TextControls
-                overlayText={overlayText}
-                fontSize={fontSize}
-                overlayOpacity={overlayOpacity}
-                selectedFont={selectedFont}
-                onTextChange={setOverlayText}
-                onFontSizeChange={setFontSize}
-                onOpacityChange={setOverlayOpacity}
-                onFontChange={setSelectedFont}
-              />
+              <div className="space-y-4">
+                <TextInput
+                  overlayText={overlayText}
+                  onTextChange={setOverlayText}
+                />
+                <FontSelector
+                  selectedFont={selectedFont}
+                  onFontChange={setSelectedFont}
+                />
+                <FontSizeControl
+                  fontSize={fontSize}
+                  onFontSizeChange={setFontSize}
+                />
+                <OpacityControl
+                  overlayOpacity={overlayOpacity}
+                  onOpacityChange={setOverlayOpacity}
+                />
+              </div>
             </div>
 
             <div className="w-full md:w-2/3">
