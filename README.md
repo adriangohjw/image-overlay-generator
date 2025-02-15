@@ -1,50 +1,20 @@
-# React + TypeScript + Vite
+# Image Text Overlay Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the Image Text Overlay Generator! This application allows you to easily upload images and overlay customizable text on them. Whether you're creating social media graphics, promotional materials, or personal projects, our tool provides a user-friendly interface to enhance your images with text.
 
-Currently, two official plugins are available:
+## Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Simple Image Upload**: Drag and drop or select images from your device to get started quickly.
+- **Customizable Text**: Adjust the font, size, and opacity of your overlay text to match your style.
+- **Real-time Preview**: See your changes in real-time as you customize your image and text.
+- **Secure and Private**: All processing is done locally in your browser, ensuring your images and data remain private.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+To use the Image Text Overlay Generator, simply upload an image, enter your desired text, and customize it using the provided controls. Once you're satisfied with your design, you can download the final image for use.
 
-- Configure the top-level `parserOptions` property like this:
+## Development Setup
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+This project is built using React, TypeScript, and Vite, providing a modern development experience with fast refresh and type safety.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+For developers looking to contribute or customize the application, you can expand the ESLint configuration for better type-aware linting rules. Follow the instructions below to set up your development environment:
