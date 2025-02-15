@@ -56,30 +56,34 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8">Image Text Overlay Generator</h1>
         
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <ImageUpload onImageUpload={setSelectedImage} />
 
           {selectedImage && (
-            <>
-              <TextControls
-                overlayText={overlayText}
-                fontSize={fontSize}
-                onTextChange={setOverlayText}
-                onFontSizeChange={setFontSize}
-              />
+            <div className="flex flex-col md:flex-row gap-6 mt-6">
+              <div className="w-full md:w-1/3">
+                <TextControls
+                  overlayText={overlayText}
+                  fontSize={fontSize}
+                  onTextChange={setOverlayText}
+                  onFontSizeChange={setFontSize}
+                />
+              </div>
 
-              <ImagePreview
-                selectedImage={selectedImage}
-                overlayText={overlayText}
-                fontSize={fontSize}
-                wrappedLines={wrappedLines}
-                onWrappedLinesChange={setWrappedLines}
-                onDownload={handleDownload}
-              />
-            </>
+              <div className="w-full md:w-2/3">
+                <ImagePreview
+                  selectedImage={selectedImage}
+                  overlayText={overlayText}
+                  fontSize={fontSize}
+                  wrappedLines={wrappedLines}
+                  onWrappedLinesChange={setWrappedLines}
+                  onDownload={handleDownload}
+                />
+              </div>
+            </div>
           )}
         </div>
       </div>
