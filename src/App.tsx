@@ -4,7 +4,6 @@ function App() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [overlayText, setOverlayText] = useState('')
   const [fontSize, setFontSize] = useState('24')
-  const [textColor, setTextColor] = useState('#FFFFFF')
   const imageContainerRef = useRef<HTMLDivElement>(null)
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +42,7 @@ function App() {
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
     // Add text
-    ctx.fillStyle = textColor
+    ctx.fillStyle = '#FFFFFF'
     ctx.font = `${Math.floor(canvas.height * parseInt(fontSize) / 400)}px Arial`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
@@ -89,7 +88,7 @@ function App() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-1 gap-4 mb-4">
                 <div>
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Font Size (px)
@@ -101,17 +100,6 @@ function App() {
                     className="w-full p-2 border rounded"
                     min="12"
                     max="72"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Text Color
-                  </label>
-                  <input
-                    type="color"
-                    value={textColor}
-                    onChange={(e) => setTextColor(e.target.value)}
-                    className="w-full p-1 border rounded h-10"
                   />
                 </div>
               </div>
@@ -126,7 +114,7 @@ function App() {
                   <p
                     style={{
                       fontSize: `${fontSize}px`,
-                      color: textColor,
+                      color: '#FFFFFF',
                     }}
                     className="text-center px-4"
                   >
