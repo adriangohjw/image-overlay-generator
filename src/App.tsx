@@ -8,6 +8,7 @@ import { FontSelector } from "./components/FontSelector";
 import { FontSizeControl } from "./components/FontSizeControl";
 import { OpacityControl } from "./components/OpacityControl";
 import { FeaturesShowcase } from "./components/FeaturesShowcase";
+import { Footer } from "./components/Footer";
 function App() {
   const [selectedImage, setSelectedImage] = useState<string>(defaultImage);
   const [overlayText, setOverlayText] = useState(
@@ -27,7 +28,7 @@ function App() {
 
         <FeaturesShowcase />
 
-        <div className="bg-white rounded-lg shadow-lg p-5 md:p-6 mb-6">
+        <div className="bg-white rounded-lg shadow-lg p-5 md:p-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex flex-col gap-4 w-full md:w-1/3">
               <ImageUpload onImageUpload={setSelectedImage} />
@@ -65,6 +66,8 @@ function App() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
