@@ -29,7 +29,7 @@ function App() {
         <FeaturesShowcase />
 
         <div className="bg-white rounded-lg shadow-lg p-5 md:p-6">
-          <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex flex-col-reverse md:flex-row gap-6">
             <div className="flex flex-col gap-4 w-full md:w-1/3">
               <ImageUpload onImageUpload={setSelectedImage} />
               <TextInput
