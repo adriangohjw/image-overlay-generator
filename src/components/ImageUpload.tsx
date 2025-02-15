@@ -43,7 +43,7 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
   };
 
   return (
-    <div className="mb-4">
+    <div>
       <label className="block text-gray-700 text-sm font-bold mb-2">
         Upload Image
       </label>

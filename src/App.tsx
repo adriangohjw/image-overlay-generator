@@ -19,11 +19,11 @@ function App() {
         </h1>
 
         <div className="bg-white rounded-lg shadow-lg p-5 md:p-6 mb-6">
-          <ImageUpload onImageUpload={setSelectedImage} />
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-col gap-4 w-full md:w-1/3">
+              <ImageUpload onImageUpload={setSelectedImage} />
 
-          {selectedImage && (
-            <div className="flex flex-col md:flex-row gap-6 mt-6">
-              <div className="w-full md:w-1/3">
+              {selectedImage && (
                 <TextControls
                   overlayText={overlayText}
                   fontSize={fontSize}
@@ -34,8 +34,10 @@ function App() {
                   onOpacityChange={setOverlayOpacity}
                   onFontChange={setSelectedFont}
                 />
-              </div>
+              )}
+            </div>
 
+            {selectedImage && (
               <div className="w-full md:w-2/3">
                 <ImagePreview
                   selectedImage={selectedImage}
@@ -45,11 +47,10 @@ function App() {
                   selectedFont={selectedFont}
                   wrappedLines={wrappedLines}
                   onWrappedLinesChange={setWrappedLines}
-                  onDownload={() => {}}
                 />
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

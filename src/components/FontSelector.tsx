@@ -41,7 +41,7 @@ export function FontSelector({
   onFontChange,
 }: FontSelectorProps) {
   return (
-    <div className="mb-4">
+    <div>
       <label className="block text-gray-700 text-sm font-bold mb-2">
         Font Style
       </label>
