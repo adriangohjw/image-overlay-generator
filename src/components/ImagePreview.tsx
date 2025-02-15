@@ -4,6 +4,7 @@ interface ImagePreviewProps {
   selectedImage: string
   overlayText: string
   fontSize: string
+  overlayOpacity: string
   wrappedLines: string[]
   onWrappedLinesChange: (lines: string[]) => void
   onDownload: () => void
@@ -13,6 +14,7 @@ export function ImagePreview({
   selectedImage,
   overlayText,
   fontSize,
+  overlayOpacity,
   wrappedLines,
   onWrappedLinesChange,
   onDownload,
@@ -75,7 +77,10 @@ export function ImagePreview({
           alt="Uploaded"
           className="w-full h-full object-contain"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+        <div 
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})` }}
+        >
           <div
             style={{
               maxWidth: '80%',

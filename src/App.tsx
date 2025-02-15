@@ -8,6 +8,7 @@ function App() {
   const [overlayText, setOverlayText] = useState('')
   const [fontSize, setFontSize] = useState('24')
   const [wrappedLines, setWrappedLines] = useState<string[]>([])
+  const [overlayOpacity, setOverlayOpacity] = useState('0.4')
 
   const handleDownload = () => {
     const canvas = document.createElement('canvas')
@@ -26,7 +27,7 @@ function App() {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 
       // Add semi-transparent black overlay
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.4)'
+      ctx.fillStyle = `rgba(0, 0, 0, ${overlayOpacity})`
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       // Add text
@@ -68,8 +69,10 @@ function App() {
                 <TextControls
                   overlayText={overlayText}
                   fontSize={fontSize}
+                  overlayOpacity={overlayOpacity}
                   onTextChange={setOverlayText}
                   onFontSizeChange={setFontSize}
+                  onOpacityChange={setOverlayOpacity}
                 />
               </div>
 
@@ -78,6 +81,7 @@ function App() {
                   selectedImage={selectedImage}
                   overlayText={overlayText}
                   fontSize={fontSize}
+                  overlayOpacity={overlayOpacity}
                   wrappedLines={wrappedLines}
                   onWrappedLinesChange={setWrappedLines}
                   onDownload={handleDownload}
