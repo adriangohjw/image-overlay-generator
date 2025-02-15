@@ -1,10 +1,63 @@
-import { useState, ChangeEvent, useRef } from 'react'
+import { useState, ChangeEvent, useRef, useEffect } from 'react'
 
 function App() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [overlayText, setOverlayText] = useState('')
   const [fontSize, setFontSize] = useState('24')
+  const [wrappedLines, setWrappedLines] = useState<string[]>([])
   const imageContainerRef = useRef<HTMLDivElement>(null)
+
+  // Function to wrap text
+  const wrapText = (ctx: CanvasRenderingContext2D, text: string, maxWidth: number) => {
+    const words = text.split(' ')
+    const lines = []
+    let currentLine = words[0] || ''
+
+    for (let i = 1; i < words.length; i++) {
+      const word = words[i]
+      const width = ctx.measureText(`${currentLine} ${word}`).width
+      if (width < maxWidth) {
+        currentLine += ` ${word}`
+      } else {
+        lines.push(currentLine)
+        currentLine = word
+      }
+    }
+    lines.push(currentLine)
+    return lines
+  }
+
+  // Calculate wrapped lines whenever text, font size, or image changes
+  useEffect(() => {
+    if (!imageContainerRef.current || !selectedImage) return
+
+    const canvas = document.createElement('canvas')
+    const img = imageContainerRef.current.querySelector('img')
+    if (!img) return
+
+    const calculateWrappedLines = () => {
+      canvas.width = img.naturalWidth
+      canvas.height = img.naturalHeight
+      
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+
+      const calculatedFontSize = Math.floor(canvas.height * parseInt(fontSize) / 400)
+      ctx.font = `${calculatedFontSize}px Arial`
+      
+      const maxWidth = canvas.width * 0.8
+      const lines = wrapText(ctx, overlayText, maxWidth)
+      setWrappedLines(lines)
+    }
+
+    // Calculate immediately if image is already loaded
+    if (img.complete) {
+      calculateWrappedLines()
+    }
+
+    // Also calculate when image loads
+    img.onload = calculateWrappedLines
+  }, [overlayText, fontSize, selectedImage])
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -43,10 +96,20 @@ function App() {
 
     // Add text
     ctx.fillStyle = '#FFFFFF'
-    ctx.font = `${Math.floor(canvas.height * parseInt(fontSize) / 400)}px Arial`
+    const calculatedFontSize = Math.floor(canvas.height * parseInt(fontSize) / 400)
+    ctx.font = `${calculatedFontSize}px Arial`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillText(overlayText, canvas.width / 2, canvas.height / 2)
+
+    // Calculate line height and total height
+    const lineHeight = calculatedFontSize * 1.2
+    const totalHeight = wrappedLines.length * lineHeight
+    
+    // Draw each line
+    const startY = (canvas.height - totalHeight) / 2
+    wrappedLines.forEach((line, index) => {
+      ctx.fillText(line, canvas.width / 2, startY + (index * lineHeight) + lineHeight / 2)
+    })
 
     // Create download link
     const link = document.createElement('a')
@@ -112,15 +175,26 @@ function App() {
                   className="w-full h-full object-contain"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                  <p
+                  <div
                     style={{
-                      fontSize: `${fontSize}px`,
-                      color: '#FFFFFF',
+                      maxWidth: '80%',
+                      width: '80%',
+                      textAlign: 'center',
                     }}
-                    className="text-center px-4"
                   >
-                    {overlayText}
-                  </p>
+                    {wrappedLines.map((line, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          fontSize: `${fontSize}px`,
+                          color: '#FFFFFF',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        {line}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
