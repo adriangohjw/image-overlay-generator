@@ -133,7 +133,10 @@ export function ImagePreview({
 
     // Create download link
     const link = document.createElement("a");
-    link.download = "edited-image.png";
+    link.download =
+      overlayText.trim() !== ""
+        ? overlayText.trim().replace(/[^a-zA-Z0-9]/g, "-") + ".png"
+        : "edited-image.png";
     link.href = canvasRef.current.toDataURL("image/png");
     link.click();
   };
