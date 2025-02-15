@@ -132,12 +132,13 @@ export function ImagePreview({
     if (!canvasRef.current) return;
 
     // Create download link
+    const fileFormat = "webp";
     const link = document.createElement("a");
     link.download =
       overlayText.trim() !== ""
-        ? overlayText.trim().replace(/[^a-zA-Z0-9]/g, "-") + ".png"
-        : "edited-image.png";
-    link.href = canvasRef.current.toDataURL("image/png");
+        ? overlayText.trim().replace(/[^a-zA-Z0-9]/g, "-") + `.${fileFormat}`
+        : `edited-image.${fileFormat}`;
+    link.href = canvasRef.current.toDataURL(`image/${fileFormat}`);
     link.click();
   };
 
