@@ -5,38 +5,41 @@ interface FontSelectorProps {
 
 const fonts = [
   {
-    name: 'Roboto',
-    displayName: 'Roboto',
-    description: 'Clean and modern',
+    name: "Roboto",
+    displayName: "Roboto",
+    description: "Clean and modern",
   },
   {
-    name: 'Open Sans',
-    displayName: 'Open Sans',
-    description: 'Friendly and approachable',
+    name: "Open Sans",
+    displayName: "Open Sans",
+    description: "Friendly and approachable",
   },
   {
-    name: 'Montserrat',
-    displayName: 'Montserrat',
-    description: 'Contemporary sans-serif',
+    name: "Montserrat",
+    displayName: "Montserrat",
+    description: "Contemporary sans-serif",
   },
   {
-    name: 'Playfair Display',
-    displayName: 'Playfair Display',
-    description: 'Elegant serif',
+    name: "Playfair Display",
+    displayName: "Playfair Display",
+    description: "Elegant serif",
   },
   {
-    name: 'Lato',
-    displayName: 'Lato',
-    description: 'Balanced and modern',
+    name: "Lato",
+    displayName: "Lato",
+    description: "Balanced and modern",
   },
   {
-    name: 'Merriweather',
-    displayName: 'Merriweather',
-    description: 'Classic serif',
+    name: "Merriweather",
+    displayName: "Merriweather",
+    description: "Classic serif",
   },
 ];
 
-export function FontSelector({ selectedFont, onFontChange }: FontSelectorProps) {
+export function FontSelector({
+  selectedFont,
+  onFontChange,
+}: FontSelectorProps) {
   return (
     <div className="mb-4">
       <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -49,8 +52,8 @@ export function FontSelector({ selectedFont, onFontChange }: FontSelectorProps) 
             onClick={() => onFontChange(font.name)}
             className={`flex flex-col items-center justify-center gap-1 p-3 rounded-lg border transition-all ${
               selectedFont === font.name
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? "border-blue-500 bg-blue-50"
+                : "border-gray-200 hover:border-gray-300"
             }`}
           >
             <div
@@ -65,4 +68,4 @@ export function FontSelector({ selectedFont, onFontChange }: FontSelectorProps) 
       </div>
     </div>
   );
-} 
+}

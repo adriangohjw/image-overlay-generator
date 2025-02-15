@@ -1,14 +1,14 @@
-import { FontSelector } from './FontSelector'
+import { FontSelector } from "./FontSelector";
 
 interface TextControlsProps {
-  overlayText: string
-  fontSize: string
-  overlayOpacity: string
-  selectedFont: string
-  onTextChange: (text: string) => void
-  onFontSizeChange: (size: string) => void
-  onOpacityChange: (opacity: string) => void
-  onFontChange: (font: string) => void
+  overlayText: string;
+  fontSize: string;
+  overlayOpacity: string;
+  selectedFont: string;
+  onTextChange: (text: string) => void;
+  onFontSizeChange: (size: string) => void;
+  onOpacityChange: (opacity: string) => void;
+  onFontChange: (font: string) => void;
 }
 
 export function TextControls({
@@ -70,5 +70,5 @@ export function TextControls({
         </div>
       </div>
     </>
-  )
-} 
+  );
+}
