@@ -5,17 +5,17 @@ interface Feature {
 
 const features: Feature[] = [
   {
-    title: "100% Secure 🔒",
+    title: "🔒 100% Secure + Open Source",
     description:
-      "Your images and data remain private - all processing is done locally in your browser.",
+      "Your images are private, processed locally in your browser. Plus, it's open source.",
   },
   {
-    title: "Free to Use 🌟",
+    title: "🌟 Free to Use",
     description:
       "No hidden costs or subscriptions - create as many overlays as you need.",
   },
   {
-    title: "Rich Customization 🎨",
+    title: "🎨 Rich Customization",
     description:
       "Customize fonts, sizes, opacity, and text positioning to match your style.",
   },
