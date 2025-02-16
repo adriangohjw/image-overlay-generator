@@ -7,7 +7,7 @@ export function TextInput({ overlayText, onTextChange }: TextInputProps) {
   return (
     <div>
       <label className="block text-gray-700 text-sm font-bold mb-2">
-        Overlay Text (Optional)
+        Overlay Text
       </label>
       <input
         type="text"
