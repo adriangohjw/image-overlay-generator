@@ -8,6 +8,8 @@ interface ImagePreviewProps {
   selectedFont: string;
   wrappedLines: string[];
   onWrappedLinesChange: (lines: string[]) => void;
+  svgContent: string | null;
+  svgSize: string;
 }
 
 export function ImagePreview({
@@ -18,115 +20,169 @@ export function ImagePreview({
   selectedFont,
   wrappedLines,
   onWrappedLinesChange,
+  svgContent,
+  svgSize,
 }: ImagePreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
-  const wrapText = (
-    ctx: CanvasRenderingContext2D,
-    text: string,
-    maxWidth: number
-  ) => {
-    const words = text.split(" ");
-    const lines = [];
-    let currentLine = words[0] || "";
+  const wrapText = useCallback(
+    (ctx: CanvasRenderingContext2D, text: string, maxWidth: number) => {
+      const words = text.split(" ");
+      const lines = [];
+      let currentLine = words[0] || "";
 
-    for (let i = 1; i < words.length; i++) {
-      const word = words[i];
-      const width = ctx.measureText(`${currentLine} ${word}`).width;
-      if (width < maxWidth) {
-        currentLine += ` ${word}`;
-      } else {
-        lines.push(currentLine);
-        currentLine = word;
+      for (let i = 1; i < words.length; i++) {
+        const word = words[i];
+        const width = ctx.measureText(`${currentLine} ${word}`).width;
+        if (width < maxWidth) {
+          currentLine += ` ${word}`;
+        } else {
+          lines.push(currentLine);
+          currentLine = word;
+        }
       }
-    }
-    lines.push(currentLine);
-    return lines;
-  };
-
-  const renderCanvas = useCallback(
-    (canvas: HTMLCanvasElement, img: HTMLImageElement) => {
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      // Set canvas dimensions to match the image
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-
-      // Draw the original image
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      // Add semi-transparent black overlay
-      ctx.fillStyle = `rgba(0, 0, 0, ${overlayOpacity})`;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Add text
-      ctx.fillStyle = "#FFFFFF";
-      const calculatedFontSize = Math.floor(
-        (canvas.height * parseInt(fontSize)) / 400
-      );
-      ctx.font = `${calculatedFontSize}px ${selectedFont}`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-
-      // Calculate line height and total height
-      const lineHeight = calculatedFontSize * 1.2;
-      const totalHeight = wrappedLines.length * lineHeight;
-
-      // Draw each line
-      const startY = (canvas.height - totalHeight) / 2;
-      wrappedLines.forEach((line, index) => {
-        ctx.fillText(
-          line,
-          canvas.width / 2,
-          startY + index * lineHeight + lineHeight / 2
-        );
-      });
+      lines.push(currentLine);
+      return lines;
     },
-    [selectedFont, fontSize, overlayOpacity, wrappedLines]
+    []
   );
 
+  // Effect for loading the image
   useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const canvas = canvasRef.current;
     const img = new Image();
+    imageRef.current = img;
     img.src = selectedImage;
 
-    const calculateWrappedLines = () => {
-      const ctx = canvas.getContext("2d");
+    const handleLoad = () => {
+      if (!canvasRef.current) return;
+      canvasRef.current.width = img.naturalWidth;
+      canvasRef.current.height = img.naturalHeight;
+
+      // Calculate wrapped lines after image is loaded and canvas is sized
+      const ctx = canvasRef.current.getContext("2d");
       if (!ctx) return;
 
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-
       const calculatedFontSize = Math.floor(
-        (canvas.height * parseInt(fontSize)) / 400
+        (canvasRef.current.height * parseInt(fontSize)) / 400
       );
       ctx.font = `${calculatedFontSize}px ${selectedFont}`;
 
-      const maxWidth = canvas.width * 0.8;
+      const maxWidth = canvasRef.current.width * 0.8;
       const lines = wrapText(ctx, overlayText, maxWidth);
       onWrappedLinesChange(lines);
 
-      renderCanvas(canvas, img);
+      // Trigger initial render
+      renderCanvas();
     };
 
     if (img.complete) {
-      calculateWrappedLines();
+      handleLoad();
+    } else {
+      img.onload = handleLoad;
     }
 
-    img.onload = calculateWrappedLines;
+    return () => {
+      img.onload = null;
+      imageRef.current = null;
+    };
   }, [
-    overlayText,
+    selectedImage,
     fontSize,
     selectedFont,
-    selectedImage,
+    overlayText,
+    wrapText,
+    onWrappedLinesChange,
+  ]);
+
+  // Effect for rendering the canvas
+  const renderCanvas = useCallback(async () => {
+    const canvas = canvasRef.current;
+    const img = imageRef.current;
+    if (!canvas || !img) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Set canvas dimensions to match the image
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+
+    // Draw the original image
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Add semi-transparent black overlay
+    ctx.fillStyle = `rgba(0, 0, 0, ${overlayOpacity})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw SVG if present
+    if (svgContent) {
+      const svgBlob = new Blob([svgContent], { type: "image/svg+xml" });
+      const svgUrl = URL.createObjectURL(svgBlob);
+      const svgImg = new Image();
+
+      await new Promise((resolve) => {
+        svgImg.onload = resolve;
+        svgImg.src = svgUrl;
+      });
+
+      // Calculate SVG dimensions and position while maintaining aspect ratio
+      const maxWidth = canvas.width * (parseInt(svgSize) / 100); // Convert percentage to decimal
+      const maxHeight = canvas.height * (parseInt(svgSize) / 100);
+
+      // Calculate scale to fit within bounds while maintaining aspect ratio
+      const scale = Math.min(
+        maxWidth / svgImg.width,
+        maxHeight / svgImg.height
+      );
+
+      const svgWidth = svgImg.width * scale;
+      const svgHeight = svgImg.height * scale;
+      const svgX = (canvas.width - svgWidth) / 2;
+      const svgY = canvas.height * 0.25 - svgHeight / 2; // 25% from top
+
+      ctx.drawImage(svgImg, svgX, svgY, svgWidth, svgHeight);
+      URL.revokeObjectURL(svgUrl);
+    }
+
+    // Add text
+    ctx.fillStyle = "#FFFFFF";
+    const calculatedFontSize = Math.floor(
+      (canvas.height * parseInt(fontSize)) / 400
+    );
+    ctx.font = `${calculatedFontSize}px ${selectedFont}`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    // Calculate line height and total height
+    const lineHeight = calculatedFontSize * 1.2;
+    const totalHeight = wrappedLines.length * lineHeight;
+
+    // Draw each line (adjusted position if SVG is present)
+    const startY = svgContent
+      ? (canvas.height - totalHeight) / 2 + canvas.height * 0.1 // Move text down when SVG is present
+      : (canvas.height - totalHeight) / 2;
+
+    wrappedLines.forEach((line, index) => {
+      ctx.fillText(
+        line,
+        canvas.width / 2,
+        startY + index * lineHeight + lineHeight / 2
+      );
+    });
+  }, [
+    selectedFont,
+    fontSize,
     overlayOpacity,
     wrappedLines,
-    onWrappedLinesChange,
-    renderCanvas,
+    svgContent,
+    svgSize,
   ]);
+
+  // Effect to trigger re-render when dependencies change
+  useEffect(() => {
+    renderCanvas();
+  }, [renderCanvas]);
 
   const handleDownload = () => {
     if (!canvasRef.current) return;

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { ImageUpload } from "./components/ImageUpload";
 import { ImagePreview } from "./components/ImagePreview";
+import { SvgUpload } from "./components/SvgUpload";
+import { SvgSizeControl } from "./components/SvgSizeControl";
 import defaultImage from "./assets/default-image.png";
 import { fonts } from "./constants/Fonts";
 import { TextInput } from "./components/TextInput";
@@ -9,6 +11,7 @@ import { FontSizeControl } from "./components/FontSizeControl";
 import { OpacityControl } from "./components/OpacityControl";
 import { FeaturesShowcase } from "./components/FeaturesShowcase";
 import { Footer } from "./components/Footer";
+
 function App() {
   const [selectedImage, setSelectedImage] = useState<string>(defaultImage);
   const [overlayText, setOverlayText] = useState(
@@ -18,6 +21,8 @@ function App() {
   const [wrappedLines, setWrappedLines] = useState<string[]>([]);
   const [overlayOpacity, setOverlayOpacity] = useState("0.4");
   const [selectedFont, setSelectedFont] = useState(fonts[0].name);
+  const [svgContent, setSvgContent] = useState<string | null>(null);
+  const [svgSize, setSvgSize] = useState("30"); // Default to 30%
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
@@ -32,6 +37,13 @@ function App() {
           <div className="flex flex-col-reverse md:flex-row gap-6">
             <div className="flex flex-col gap-4 w-full md:w-1/3">
               <ImageUpload onImageUpload={setSelectedImage} />
+              <SvgUpload onSvgUpload={setSvgContent} />
+              {svgContent && (
+                <SvgSizeControl
+                  svgSize={svgSize}
+                  onSvgSizeChange={setSvgSize}
+                />
+              )}
               <TextInput
                 overlayText={overlayText}
                 onTextChange={setOverlayText}
@@ -59,6 +71,8 @@ function App() {
                 selectedFont={selectedFont}
                 wrappedLines={wrappedLines}
                 onWrappedLinesChange={setWrappedLines}
+                svgContent={svgContent}
+                svgSize={svgSize}
               />
             </div>
           </div>
