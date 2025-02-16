@@ -33,7 +33,7 @@ export function ConfigurationSteps() {
       ),
     },
     {
-      title: "2. Add & Style Your Text (Optional)",
+      title: "2. Add & Style Your Text",
       content: (
         <div className="space-y-4">
           <TextInput />
@@ -47,7 +47,7 @@ export function ConfigurationSteps() {
       ),
     },
     {
-      title: "3. Add SVG Overlay (Optional)",
+      title: "3. Add SVG Overlay",
       content: (
         <div className="space-y-4">
           <SvgUpload />
