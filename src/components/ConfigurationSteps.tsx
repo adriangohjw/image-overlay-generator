@@ -84,13 +84,15 @@ export function ConfigurationSteps({
       title: "3. Add SVG Overlay (Optional)",
       content: (
         <div className="space-y-4">
-          <SvgUpload onSvgUpload={onSvgUpload} />
-          <div className="border-t pt-4">
-            <SvgSizeControl
-              svgSize={svgSize}
-              onSvgSizeChange={onSvgSizeChange}
-            />
-          </div>
+          <SvgUpload onSvgUpload={onSvgUpload} svgContent={svgContent} />
+          {svgContent && (
+            <div className="border-t pt-4">
+              <SvgSizeControl
+                svgSize={svgSize}
+                onSvgSizeChange={onSvgSizeChange}
+              />
+            </div>
+          )}
         </div>
       ),
     },
