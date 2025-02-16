@@ -14,6 +14,7 @@ export function ImagePreview() {
     svgSize,
     svgTextDistance,
     svgPosition,
+    overlayStyle,
   } = useApp();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -76,9 +77,31 @@ export function ImagePreview() {
     // Draw the original image
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    // Add semi-transparent black overlay
-    ctx.fillStyle = `rgba(0, 0, 0, ${overlayOpacity})`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Add overlay based on style
+    if (overlayStyle === "solid") {
+      ctx.fillStyle = `rgba(0, 0, 0, ${overlayOpacity})`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+      // Create radial gradient
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = Math.max(canvas.width, canvas.height) / 2;
+      const gradient = ctx.createRadialGradient(
+        centerX,
+        centerY,
+        0,
+        centerX,
+        centerY,
+        radius
+      );
+
+      // The center is darker (using overlayOpacity) and fades to transparent
+      gradient.addColorStop(0, `rgba(0, 0, 0, ${overlayOpacity})`);
+      gradient.addColorStop(1, `rgba(0, 0, 0, 0)`);
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
     // Draw SVG if present
     if (svgUrl && svgContent) {
@@ -201,6 +224,7 @@ export function ImagePreview() {
     svgUrl,
     svgTextDistance,
     svgPosition,
+    overlayStyle,
   ]);
 
   // Effect for loading the image

@@ -8,6 +8,7 @@ import { FontSizeControl } from "./FontSizeControl";
 import { OpacityControl } from "./OpacityControl";
 import { SvgTextDistanceControl } from "./SvgTextDistanceControl";
 import { SvgPositionControl } from "./SvgPositionControl";
+import { OverlayStyleControl } from "./OverlayStyleControl";
 import { useApp } from "../context/AppContext";
 
 interface Step {
@@ -27,7 +28,10 @@ export function ConfigurationSteps() {
           <ImageUpload />
           {selectedImage && (
             <div className="border-t pt-4">
-              <OpacityControl />
+              <div className="space-y-4">
+                <OverlayStyleControl />
+                <OpacityControl />
+              </div>
             </div>
           )}
         </div>
