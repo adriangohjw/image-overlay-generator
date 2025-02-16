@@ -20,6 +20,8 @@ interface AppContextType {
   setSvgSize: (size: string) => void;
   svgTextDistance: string;
   setSvgTextDistance: (distance: string) => void;
+  svgPosition: "above" | "below";
+  setSvgPosition: (position: "above" | "below") => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -34,6 +36,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [svgContent, setSvgContent] = useState<string | null>(null);
   const [svgSize, setSvgSize] = useState<string>("50");
   const [svgTextDistance, setSvgTextDistance] = useState<string>("20");
+  const [svgPosition, setSvgPosition] = useState<"above" | "below">("above");
 
   const value = {
     selectedImage,
@@ -54,6 +57,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setSvgSize,
     svgTextDistance,
     setSvgTextDistance,
+    svgPosition,
+    setSvgPosition,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -13,6 +13,7 @@ export function ImagePreview() {
     svgContent,
     svgSize,
     svgTextDistance,
+    svgPosition,
   } = useApp();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -121,29 +122,49 @@ export function ImagePreview() {
 
       // Calculate dynamic positions with gap based on svgTextDistance
       const gap = (canvas.height * parseInt(svgTextDistance)) / 400;
-      let verticalStartPosition;
+      let verticalStartPosition: number;
+      let textStartPosition: number;
 
       if (overlayText.trim()) {
         const combinedHeight = svgHeight + gap + totalTextHeight;
         verticalStartPosition = (canvas.height - combinedHeight) / 2;
+
+        if (svgPosition === "above") {
+          // SVG above text
+          textStartPosition = verticalStartPosition + svgHeight + gap;
+          ctx.drawImage(
+            svgImg,
+            svgX,
+            verticalStartPosition,
+            svgWidth,
+            svgHeight
+          );
+
+          // Draw text below SVG
+          wrappedLines.forEach((line, index) => {
+            const textY =
+              textStartPosition + index * lineHeight + lineHeight / 2;
+            ctx.fillText(line, canvas.width / 2, textY);
+          });
+        } else {
+          // Text above SVG
+          textStartPosition = verticalStartPosition;
+          const svgY = textStartPosition + totalTextHeight + gap;
+
+          // Draw text first
+          wrappedLines.forEach((line, index) => {
+            const textY =
+              textStartPosition + index * lineHeight + lineHeight / 2;
+            ctx.fillText(line, canvas.width / 2, textY);
+          });
+
+          // Draw SVG below text
+          ctx.drawImage(svgImg, svgX, svgY, svgWidth, svgHeight);
+        }
       } else {
+        // Only SVG, no text
         verticalStartPosition = (canvas.height - svgHeight) / 2;
-      }
-
-      // Draw SVG at calculated position
-      ctx.drawImage(svgImg, svgX, verticalStartPosition, svgWidth, svgHeight);
-
-      // Draw text below SVG with gap
-      if (overlayText.trim()) {
-        wrappedLines.forEach((line, index) => {
-          const textY =
-            verticalStartPosition +
-            svgHeight +
-            gap +
-            index * lineHeight +
-            lineHeight / 2;
-          ctx.fillText(line, canvas.width / 2, textY);
-        });
+        ctx.drawImage(svgImg, svgX, verticalStartPosition, svgWidth, svgHeight);
       }
     } else {
       // Add text style configuration
@@ -179,6 +200,7 @@ export function ImagePreview() {
     overlayText,
     svgUrl,
     svgTextDistance,
+    svgPosition,
   ]);
 
   // Effect for loading the image

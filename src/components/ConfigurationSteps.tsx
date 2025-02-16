@@ -7,6 +7,7 @@ import { FontSelector } from "./FontSelector";
 import { FontSizeControl } from "./FontSizeControl";
 import { OpacityControl } from "./OpacityControl";
 import { SvgTextDistanceControl } from "./SvgTextDistanceControl";
+import { SvgPositionControl } from "./SvgPositionControl";
 import { useApp } from "../context/AppContext";
 
 interface Step {
@@ -55,6 +56,7 @@ export function ConfigurationSteps() {
             <div className="border-t pt-4">
               <div className="space-y-4">
                 <SvgSizeControl />
+                <SvgPositionControl />
                 {overlayText && <SvgTextDistanceControl />}
               </div>
             </div>
