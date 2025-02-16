@@ -9,6 +9,7 @@ import { OpacityControl } from "./OpacityControl";
 
 interface ConfigurationStepsProps {
   onImageUpload: (image: string) => void;
+  selectedImage: string;
   onSvgUpload: (svg: string | null) => void;
   svgContent: string | null;
   svgSize: string;
@@ -30,6 +31,7 @@ interface Step {
 
 export function ConfigurationSteps({
   onImageUpload,
+  selectedImage,
   onSvgUpload,
   svgContent,
   svgSize,
@@ -51,12 +53,14 @@ export function ConfigurationSteps({
       content: (
         <div className="space-y-4">
           <ImageUpload onImageUpload={onImageUpload} />
-          <div className="border-t pt-4">
-            <OpacityControl
-              overlayOpacity={overlayOpacity}
-              onOpacityChange={onOpacityChange}
-            />
-          </div>
+          {selectedImage && (
+            <div className="border-t pt-4">
+              <OpacityControl
+                overlayOpacity={overlayOpacity}
+                onOpacityChange={onOpacityChange}
+              />
+            </div>
+          )}
         </div>
       ),
     },

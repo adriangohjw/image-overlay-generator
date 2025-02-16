@@ -30,6 +30,7 @@ function App() {
             <div className="flex flex-col gap-4 w-full md:w-1/3">
               <ConfigurationSteps
                 onImageUpload={setSelectedImage}
+                selectedImage={selectedImage}
                 onSvgUpload={setSvgContent}
                 svgContent={svgContent}
                 svgSize={svgSize}
