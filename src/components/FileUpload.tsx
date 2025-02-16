@@ -66,7 +66,7 @@ export function FileUpload({
       ) : (
         <>
           <div
-            className={`relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
+            className={`relative border-2 border-dashed rounded-lg p-4 md:p-8 text-center cursor-pointer transition-colors
               ${
                 isDragging
                   ? "border-blue-500 bg-blue-50"
@@ -83,9 +83,9 @@ export function FileUpload({
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               title=""
             />
-            <div className="space-y-4">
+            <div className="md:space-y-4">
               <svg
-                className={`mx-auto h-12 w-12 ${
+                className={`hidden md:block mx-auto h-12 w-12 ${
                   isDragging ? "text-blue-500" : "text-gray-400"
                 }`}
                 stroke="currentColor"
@@ -101,8 +101,8 @@ export function FileUpload({
                 />
               </svg>
               <div className="text-gray-600">
-                <span className="font-medium">Click to upload</span> or drag and
-                drop
+                <span className="font-medium">Click to upload</span>
+                <span className="hidden md:block">or drag and drop</span>
               </div>
             </div>
           </div>
