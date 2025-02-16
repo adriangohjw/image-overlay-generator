@@ -13,7 +13,7 @@ import { useApp } from "../context/AppContext";
 
 interface Step {
   title: string;
-  content: JSX.Element;
+  content: React.ReactNode;
 }
 
 export function ConfigurationSteps() {
