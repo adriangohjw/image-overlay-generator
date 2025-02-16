@@ -8,15 +8,13 @@ import { ConfigurationSteps } from "./components/ConfigurationSteps";
 
 function App() {
   const [selectedImage, setSelectedImage] = useState<string>(defaultImage);
-  const [overlayText, setOverlayText] = useState(
-    "This is the default text. Replace me!"
-  );
-  const [fontSize, setFontSize] = useState("28");
+  const [overlayText, setOverlayText] = useState<string>("");
+  const [fontSize, setFontSize] = useState<string>("28");
   const [wrappedLines, setWrappedLines] = useState<string[]>([]);
-  const [overlayOpacity, setOverlayOpacity] = useState("0.4");
-  const [selectedFont, setSelectedFont] = useState(fonts[0].name);
+  const [overlayOpacity, setOverlayOpacity] = useState<string>("0.4");
+  const [selectedFont, setSelectedFont] = useState<string>(fonts[0].name);
   const [svgContent, setSvgContent] = useState<string | null>(null);
-  const [svgSize, setSvgSize] = useState("50"); // Default to 50%
+  const [svgSize, setSvgSize] = useState<string>("50"); // Default to 50%
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
