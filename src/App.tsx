@@ -1,16 +1,10 @@
 import { useState } from "react";
-import { ImageUpload } from "./components/ImageUpload";
 import { ImagePreview } from "./components/ImagePreview";
-import { SvgUpload } from "./components/SvgUpload";
-import { SvgSizeControl } from "./components/SvgSizeControl";
 import defaultImage from "./assets/default-image.png";
 import { fonts } from "./constants/Fonts";
-import { TextInput } from "./components/TextInput";
-import { FontSelector } from "./components/FontSelector";
-import { FontSizeControl } from "./components/FontSizeControl";
-import { OpacityControl } from "./components/OpacityControl";
 import { FeaturesShowcase } from "./components/FeaturesShowcase";
 import { Footer } from "./components/Footer";
+import { ConfigurationSteps } from "./components/ConfigurationSteps";
 
 function App() {
   const [selectedImage, setSelectedImage] = useState<string>(defaultImage);
@@ -36,27 +30,18 @@ function App() {
         <div className="bg-white rounded-lg shadow-lg p-5 md:p-6">
           <div className="flex flex-col-reverse md:flex-row gap-6">
             <div className="flex flex-col gap-4 w-full md:w-1/3">
-              <ImageUpload onImageUpload={setSelectedImage} />
-              <SvgUpload onSvgUpload={setSvgContent} />
-              {svgContent && (
-                <SvgSizeControl
-                  svgSize={svgSize}
-                  onSvgSizeChange={setSvgSize}
-                />
-              )}
-              <TextInput
+              <ConfigurationSteps
+                onImageUpload={setSelectedImage}
+                onSvgUpload={setSvgContent}
+                svgContent={svgContent}
+                svgSize={svgSize}
+                onSvgSizeChange={setSvgSize}
                 overlayText={overlayText}
                 onTextChange={setOverlayText}
-              />
-              <FontSelector
                 selectedFont={selectedFont}
                 onFontChange={setSelectedFont}
-              />
-              <FontSizeControl
                 fontSize={fontSize}
                 onFontSizeChange={setFontSize}
-              />
-              <OpacityControl
                 overlayOpacity={overlayOpacity}
                 onOpacityChange={setOverlayOpacity}
               />
