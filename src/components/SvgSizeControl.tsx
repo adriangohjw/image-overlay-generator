@@ -21,7 +21,7 @@ export function SvgSizeControl({
       <input
         type="range"
         min="10"
-        max="50"
+        max="90"
         value={svgSize}
         onChange={handleChange}
         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
