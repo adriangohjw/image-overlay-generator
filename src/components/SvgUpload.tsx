@@ -1,5 +1,6 @@
 import { FileUpload } from "./FileUpload";
 import { useApp } from "../context/AppContext";
+import defaultSvg from "../assets/default-svg.svg";
 
 export function SvgUpload() {
   const { svgContent, setSvgContent } = useApp();
@@ -27,7 +28,7 @@ export function SvgUpload() {
 
   const handleTrySampleImage = async () => {
     try {
-      const response = await fetch("/src/assets/default-svg.svg");
+      const response = await fetch(defaultSvg);
       const svgText = await response.text();
       setSvgContent(convertSvgToWhite(svgText));
     } catch (error) {

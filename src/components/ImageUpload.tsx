@@ -1,5 +1,6 @@
 import { FileUpload } from "./FileUpload";
 import { useApp } from "../context/AppContext";
+import defaultImage from "../assets/default-image.png";
 
 export function ImageUpload() {
   const { selectedImage, setSelectedImage } = useApp();
@@ -16,7 +17,7 @@ export function ImageUpload() {
 
   const handleTrySampleImage = () => {
     const img = new Image();
-    img.src = "/src/assets/default-image.png";
+    img.src = defaultImage;
     img.onload = () => {
       setSelectedImage(img.src);
     };
