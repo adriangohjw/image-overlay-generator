@@ -15,7 +15,7 @@ export function Footer() {
       <p>
         This project is{" "}
         <a
-          href="https://github.com/adriangohjw/text-over-image"
+          href="https://github.com/adriangohjw/text-overlay-generator"
           className="text-blue-500 font-bold hover:underline"
           target="_blank"
           rel="noopener noreferrer"
