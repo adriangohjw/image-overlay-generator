@@ -34,21 +34,7 @@ export function ImageUpload() {
       accept="image/*"
       label="Upload Image"
       uploadedMessage="Image uploaded!"
-    >
-      <div className="mt-4 text-center">
-        <button
-          onClick={handleTrySampleImage}
-          className="p-2 rounded-lg inline-flex items-center justify-center gap-2 text-white bg-blue-600 hover:bg-blue-700 border-1 border-blue-600 hover:border-blue-700 font-medium w-full"
-        >
-          <span role="img" aria-label="sparkles">
-            ✨
-          </span>
-          Try with sample image
-          <span role="img" aria-label="sparkles">
-            ✨
-          </span>
-        </button>
-      </div>
-    </FileUpload>
+      handleTrySampleImage={handleTrySampleImage}
+    />
   );
 }

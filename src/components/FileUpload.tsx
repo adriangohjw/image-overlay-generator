@@ -1,5 +1,24 @@
 import { ChangeEvent, DragEvent, ReactNode, useState } from "react";
 
+const TryWithSampleImageButton = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <div className="mt-4 text-center">
+      <button
+        onClick={onClick}
+        className="p-2 rounded-lg inline-flex items-center justify-center gap-2 text-white bg-blue-600 hover:bg-blue-700 border-1 border-blue-600 hover:border-blue-700 font-medium w-full"
+      >
+        <span role="img" aria-label="sparkles">
+          ✨
+        </span>
+        Try with sample image
+        <span role="img" aria-label="sparkles">
+          ✨
+        </span>
+      </button>
+    </div>
+  );
+};
+
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
   hasFile: boolean;
@@ -8,6 +27,7 @@ interface FileUploadProps {
   label: string;
   uploadedMessage: string;
   children?: ReactNode;
+  handleTrySampleImage: () => void;
 }
 
 export function FileUpload({
@@ -17,7 +37,7 @@ export function FileUpload({
   accept,
   label,
   uploadedMessage,
-  children,
+  handleTrySampleImage,
 }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
 
@@ -106,7 +126,7 @@ export function FileUpload({
               </div>
             </div>
           </div>
-          {children}
+          <TryWithSampleImageButton onClick={handleTrySampleImage} />
         </>
       )}
     </div>
