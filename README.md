@@ -1,5 +1,7 @@
 # Image Overlay Generator
 
+![Demo](demo.gif)
+
 Welcome to the Image Overlay Generator! This application allows you to easily upload images and overlay customizable text on them. Whether you're creating social media graphics, promotional materials, or personal projects, our tool provides a user-friendly interface to enhance your images with text.
 
 ## Key Features
