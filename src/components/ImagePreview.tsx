@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useMemo } from "react";
 import { useApp } from "../context/AppContext";
 
 export function ImagePreview() {
@@ -16,6 +16,23 @@ export function ImagePreview() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const svgRef = useRef<HTMLImageElement | null>(null);
+
+  // Memoize SVG URL creation
+  const svgUrl = useMemo(() => {
+    if (!svgContent) return null;
+    const blob = new Blob([svgContent], { type: "image/svg+xml" });
+    return URL.createObjectURL(blob);
+  }, [svgContent]);
+
+  // Cleanup SVG URL when component unmounts or SVG changes
+  useEffect(() => {
+    return () => {
+      if (svgUrl) {
+        URL.revokeObjectURL(svgUrl);
+      }
+    };
+  }, [svgUrl]);
 
   const wrapText = useCallback(
     (ctx: CanvasRenderingContext2D, text: string, maxWidth: number) => {
@@ -62,21 +79,23 @@ export function ImagePreview() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw SVG if present
-    if (svgContent) {
-      const svgBlob = new Blob([svgContent], { type: "image/svg+xml" });
-      const svgUrl = URL.createObjectURL(svgBlob);
-      const svgImg = new Image();
+    if (svgUrl && svgContent) {
+      if (!svgRef.current) {
+        svgRef.current = new Image();
+      }
+      const svgImg = svgRef.current;
 
-      await new Promise((resolve) => {
-        svgImg.onload = resolve;
-        svgImg.src = svgUrl;
-      });
+      if (!svgImg.src) {
+        await new Promise((resolve) => {
+          svgImg.onload = resolve;
+          svgImg.src = svgUrl;
+        });
+      }
 
       // Calculate SVG dimensions and position while maintaining aspect ratio
-      const maxWidth = canvas.width * (parseInt(svgSize) / 100); // Convert percentage to decimal
+      const maxWidth = canvas.width * (parseInt(svgSize) / 100);
       const maxHeight = canvas.height * (parseInt(svgSize) / 100);
 
-      // Calculate scale to fit within bounds while maintaining aspect ratio
       const scale = Math.min(
         maxWidth / svgImg.width,
         maxHeight / svgImg.height
@@ -100,21 +119,18 @@ export function ImagePreview() {
       const totalTextHeight = wrappedLines.length * lineHeight;
 
       // Calculate dynamic positions with gap
-      const gap = calculatedFontSize * 1.5; // Dynamic gap based on font size
+      const gap = calculatedFontSize * 1.5;
       let verticalStartPosition;
 
       if (overlayText.trim()) {
-        // If there's text, position SVG with gap for text
         const combinedHeight = svgHeight + gap + totalTextHeight;
         verticalStartPosition = (canvas.height - combinedHeight) / 2;
       } else {
-        // If no text, center the SVG vertically
         verticalStartPosition = (canvas.height - svgHeight) / 2;
       }
 
       // Draw SVG at calculated position
       ctx.drawImage(svgImg, svgX, verticalStartPosition, svgWidth, svgHeight);
-      URL.revokeObjectURL(svgUrl);
 
       // Draw text below SVG with gap
       if (overlayText.trim()) {
@@ -160,6 +176,7 @@ export function ImagePreview() {
     svgContent,
     svgSize,
     overlayText,
+    svgUrl,
   ]);
 
   // Effect for loading the image
@@ -189,9 +206,6 @@ export function ImagePreview() {
         ? wrapText(ctx, overlayText, maxWidth)
         : [];
       setWrappedLines(lines);
-
-      // Trigger initial render
-      renderCanvas();
     };
 
     if (img.complete) {
@@ -211,16 +225,14 @@ export function ImagePreview() {
     overlayText,
     wrapText,
     setWrappedLines,
-    overlayOpacity,
-    svgContent,
-    svgSize,
-    renderCanvas,
   ]);
 
   // Effect to trigger re-render when dependencies change
   useEffect(() => {
-    renderCanvas();
-  }, [renderCanvas]);
+    if (selectedImage) {
+      renderCanvas();
+    }
+  }, [selectedImage, renderCanvas]);
 
   const handleDownload = () => {
     if (!canvasRef.current) return;
