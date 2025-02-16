@@ -61,7 +61,7 @@ export function ConfigurationSteps({
       ),
     },
     {
-      title: "2. Add & Style Your Text",
+      title: "2. Add & Style Your Text (Optional)",
       content: (
         <div className="space-y-4">
           <TextInput overlayText={overlayText} onTextChange={onTextChange} />

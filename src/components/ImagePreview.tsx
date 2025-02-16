@@ -28,6 +28,8 @@ export function ImagePreview({
 
   const wrapText = useCallback(
     (ctx: CanvasRenderingContext2D, text: string, maxWidth: number) => {
+      if (!text.trim()) return [];
+
       const words = text.split(" ");
       const lines = [];
       let currentLine = words[0] || "";
@@ -69,7 +71,9 @@ export function ImagePreview({
       ctx.font = `${calculatedFontSize}px ${selectedFont}`;
 
       const maxWidth = canvasRef.current.width * 0.8;
-      const lines = wrapText(ctx, overlayText, maxWidth);
+      const lines = overlayText.trim()
+        ? wrapText(ctx, overlayText, maxWidth)
+        : [];
       onWrappedLinesChange(lines);
 
       // Trigger initial render
@@ -155,23 +159,33 @@ export function ImagePreview({
 
       // Calculate dynamic positions with gap
       const gap = calculatedFontSize * 1.5; // Dynamic gap based on font size
-      const combinedHeight = svgHeight + gap + totalTextHeight;
-      const verticalStartPosition = (canvas.height - combinedHeight) / 2;
+      let verticalStartPosition;
+
+      if (overlayText.trim()) {
+        // If there's text, position SVG with gap for text
+        const combinedHeight = svgHeight + gap + totalTextHeight;
+        verticalStartPosition = (canvas.height - combinedHeight) / 2;
+      } else {
+        // If no text, center the SVG vertically
+        verticalStartPosition = (canvas.height - svgHeight) / 2;
+      }
 
       // Draw SVG at calculated position
       ctx.drawImage(svgImg, svgX, verticalStartPosition, svgWidth, svgHeight);
       URL.revokeObjectURL(svgUrl);
 
       // Draw text below SVG with gap
-      wrappedLines.forEach((line, index) => {
-        const textY =
-          verticalStartPosition +
-          svgHeight +
-          gap +
-          index * lineHeight +
-          lineHeight / 2;
-        ctx.fillText(line, canvas.width / 2, textY);
-      });
+      if (overlayText.trim()) {
+        wrappedLines.forEach((line, index) => {
+          const textY =
+            verticalStartPosition +
+            svgHeight +
+            gap +
+            index * lineHeight +
+            lineHeight / 2;
+          ctx.fillText(line, canvas.width / 2, textY);
+        });
+      }
     } else {
       // Add text style configuration
       ctx.fillStyle = "#FFFFFF";
@@ -188,11 +202,13 @@ export function ImagePreview({
       const verticalStartPosition = (canvas.height - totalHeight) / 2;
 
       // Draw centered text when no SVG
-      wrappedLines.forEach((line, index) => {
-        const textY =
-          verticalStartPosition + index * lineHeight + lineHeight / 2;
-        ctx.fillText(line, canvas.width / 2, textY);
-      });
+      if (overlayText.trim()) {
+        wrappedLines.forEach((line, index) => {
+          const textY =
+            verticalStartPosition + index * lineHeight + lineHeight / 2;
+          ctx.fillText(line, canvas.width / 2, textY);
+        });
+      }
     }
   }, [
     selectedFont,
@@ -201,6 +217,7 @@ export function ImagePreview({
     wrappedLines,
     svgContent,
     svgSize,
+    overlayText,
   ]);
 
   // Effect to trigger re-render when dependencies change
