@@ -71,10 +71,12 @@ export function ConfigurationSteps({
                 selectedFont={selectedFont}
                 onFontChange={onFontChange}
               />
-              <FontSizeControl
-                fontSize={fontSize}
-                onFontSizeChange={onFontSizeChange}
-              />
+              {overlayText && (
+                <FontSizeControl
+                  fontSize={fontSize}
+                  onFontSizeChange={onFontSizeChange}
+                />
+              )}
             </div>
           </div>
         </div>
