@@ -12,6 +12,7 @@ export function ImagePreview() {
     setWrappedLines,
     svgContent,
     svgSize,
+    svgTextDistance,
   } = useApp();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -118,8 +119,8 @@ export function ImagePreview() {
       const lineHeight = calculatedFontSize * 1.2;
       const totalTextHeight = wrappedLines.length * lineHeight;
 
-      // Calculate dynamic positions with gap
-      const gap = calculatedFontSize * 1.5;
+      // Calculate dynamic positions with gap based on svgTextDistance
+      const gap = (canvas.height * parseInt(svgTextDistance)) / 400;
       let verticalStartPosition;
 
       if (overlayText.trim()) {
@@ -177,6 +178,7 @@ export function ImagePreview() {
     svgSize,
     overlayText,
     svgUrl,
+    svgTextDistance,
   ]);
 
   // Effect for loading the image
