@@ -1,12 +1,8 @@
-interface FontSizeControlProps {
-  fontSize: string;
-  onFontSizeChange: (size: string) => void;
-}
+import { useApp } from "../context/AppContext";
 
-export function FontSizeControl({
-  fontSize,
-  onFontSizeChange,
-}: FontSizeControlProps) {
+export function FontSizeControl() {
+  const { fontSize, setFontSize } = useApp();
+
   return (
     <div>
       <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -15,7 +11,7 @@ export function FontSizeControl({
       <input
         type="range"
         value={fontSize}
-        onChange={(e) => onFontSizeChange(e.target.value)}
+        onChange={(e) => setFontSize(e.target.value)}
         className="w-full"
         min="12"
         max="72"

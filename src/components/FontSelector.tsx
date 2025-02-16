@@ -1,14 +1,9 @@
 import { fonts } from "../constants/Fonts";
+import { useApp } from "../context/AppContext";
 
-interface FontSelectorProps {
-  selectedFont: string;
-  onFontChange: (font: string) => void;
-}
+export function FontSelector() {
+  const { selectedFont, setSelectedFont } = useApp();
 
-export function FontSelector({
-  selectedFont,
-  onFontChange,
-}: FontSelectorProps) {
   return (
     <div>
       <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -18,7 +13,7 @@ export function FontSelector({
         {fonts.map((font) => (
           <button
             key={font.name}
-            onClick={() => onFontChange(font.name)}
+            onClick={() => setSelectedFont(font.name)}
             className={`flex flex-col items-center justify-center gap-1 p-3 rounded-lg border transition-all ${
               selectedFont === font.name
                 ? "border-blue-500 bg-blue-50"

@@ -1,16 +1,11 @@
 import { ChangeEvent } from "react";
+import { useApp } from "../context/AppContext";
 
-interface SvgSizeControlProps {
-  svgSize: string;
-  onSvgSizeChange: (size: string) => void;
-}
+export function SvgSizeControl() {
+  const { svgSize, setSvgSize } = useApp();
 
-export function SvgSizeControl({
-  svgSize,
-  onSvgSizeChange,
-}: SvgSizeControlProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onSvgSizeChange(e.target.value);
+    setSvgSize(e.target.value);
   };
 
   return (

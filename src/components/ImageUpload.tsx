@@ -1,19 +1,14 @@
 import { FileUpload } from "./FileUpload";
+import { useApp } from "../context/AppContext";
 
-interface ImageUploadProps {
-  onImageUpload: (imageDataUrl: string | null) => void;
-  selectedImage: string | null;
-}
+export function ImageUpload() {
+  const { selectedImage, setSelectedImage } = useApp();
 
-export function ImageUpload({
-  onImageUpload,
-  selectedImage,
-}: ImageUploadProps) {
   const handleImageUpload = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       if (e.target?.result) {
-        onImageUpload(e.target.result as string);
+        setSelectedImage(e.target.result as string);
       }
     };
     reader.readAsDataURL(file);
@@ -23,12 +18,12 @@ export function ImageUpload({
     const img = new Image();
     img.src = "/src/assets/default-image.png";
     img.onload = () => {
-      onImageUpload(img.src);
+      setSelectedImage(img.src);
     };
   };
 
   const handleRemoveImage = () => {
-    onImageUpload(null);
+    setSelectedImage(null);
   };
 
   return (

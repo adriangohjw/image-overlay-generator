@@ -1,12 +1,8 @@
-interface OpacityControlProps {
-  overlayOpacity: string;
-  onOpacityChange: (opacity: string) => void;
-}
+import { useApp } from "../context/AppContext";
 
-export function OpacityControl({
-  overlayOpacity,
-  onOpacityChange,
-}: OpacityControlProps) {
+export function OpacityControl() {
+  const { overlayOpacity, setOverlayOpacity } = useApp();
+
   return (
     <div>
       <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -15,7 +11,7 @@ export function OpacityControl({
       <input
         type="range"
         value={overlayOpacity}
-        onChange={(e) => onOpacityChange(e.target.value)}
+        onChange={(e) => setOverlayOpacity(e.target.value)}
         className="w-full"
         min="0"
         max="1"

@@ -1,11 +1,9 @@
 import { FileUpload } from "./FileUpload";
+import { useApp } from "../context/AppContext";
 
-interface SvgUploadProps {
-  onSvgUpload: (svgContent: string | null) => void;
-  svgContent: string | null;
-}
+export function SvgUpload() {
+  const { svgContent, setSvgContent } = useApp();
 
-export function SvgUpload({ onSvgUpload, svgContent }: SvgUploadProps) {
   const handleSvgUpload = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -15,14 +13,14 @@ export function SvgUpload({ onSvgUpload, svgContent }: SvgUploadProps) {
         const whiteSvg = svgContent
           .replace(/fill="[^"]*"/g, 'fill="white"')
           .replace(/stroke="[^"]*"/g, 'stroke="white"');
-        onSvgUpload(whiteSvg);
+        setSvgContent(whiteSvg);
       }
     };
     reader.readAsText(file);
   };
 
   const handleRemoveSvg = () => {
-    onSvgUpload(null);
+    setSvgContent(null);
   };
 
   return (

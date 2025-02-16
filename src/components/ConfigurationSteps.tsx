@@ -6,45 +6,15 @@ import { TextInput } from "./TextInput";
 import { FontSelector } from "./FontSelector";
 import { FontSizeControl } from "./FontSizeControl";
 import { OpacityControl } from "./OpacityControl";
-
-interface ConfigurationStepsProps {
-  onImageUpload: (image: string | null) => void;
-  selectedImage: string | null;
-  onSvgUpload: (svg: string | null) => void;
-  svgContent: string | null;
-  svgSize: string;
-  onSvgSizeChange: (size: string) => void;
-  overlayText: string;
-  onTextChange: (text: string) => void;
-  selectedFont: string;
-  onFontChange: (font: string) => void;
-  fontSize: string;
-  onFontSizeChange: (size: string) => void;
-  overlayOpacity: string;
-  onOpacityChange: (opacity: string) => void;
-}
+import { useApp } from "../context/AppContext";
 
 interface Step {
   title: string;
   content: JSX.Element;
 }
 
-export function ConfigurationSteps({
-  onImageUpload,
-  selectedImage,
-  onSvgUpload,
-  svgContent,
-  svgSize,
-  onSvgSizeChange,
-  overlayText,
-  onTextChange,
-  selectedFont,
-  onFontChange,
-  fontSize,
-  onFontSizeChange,
-  overlayOpacity,
-  onOpacityChange,
-}: ConfigurationStepsProps) {
+export function ConfigurationSteps() {
+  const { selectedImage, svgContent, overlayText } = useApp();
   const [activeStep, setActiveStep] = useState<number>(0);
 
   const steps: Step[] = [
@@ -52,16 +22,10 @@ export function ConfigurationSteps({
       title: "1. Choose Your Image & Opacity",
       content: (
         <div className="space-y-4">
-          <ImageUpload
-            onImageUpload={onImageUpload}
-            selectedImage={selectedImage}
-          />
+          <ImageUpload />
           {selectedImage && (
             <div className="border-t pt-4">
-              <OpacityControl
-                overlayOpacity={overlayOpacity}
-                onOpacityChange={onOpacityChange}
-              />
+              <OpacityControl />
             </div>
           )}
         </div>
@@ -71,19 +35,11 @@ export function ConfigurationSteps({
       title: "2. Add & Style Your Text (Optional)",
       content: (
         <div className="space-y-4">
-          <TextInput overlayText={overlayText} onTextChange={onTextChange} />
+          <TextInput />
           <div className="border-t pt-4">
             <div className="space-y-4">
-              <FontSelector
-                selectedFont={selectedFont}
-                onFontChange={onFontChange}
-              />
-              {overlayText && (
-                <FontSizeControl
-                  fontSize={fontSize}
-                  onFontSizeChange={onFontSizeChange}
-                />
-              )}
+              <FontSelector />
+              {overlayText && <FontSizeControl />}
             </div>
           </div>
         </div>
@@ -93,13 +49,10 @@ export function ConfigurationSteps({
       title: "3. Add SVG Overlay (Optional)",
       content: (
         <div className="space-y-4">
-          <SvgUpload onSvgUpload={onSvgUpload} svgContent={svgContent} />
+          <SvgUpload />
           {svgContent && (
             <div className="border-t pt-4">
-              <SvgSizeControl
-                svgSize={svgSize}
-                onSvgSizeChange={onSvgSizeChange}
-              />
+              <SvgSizeControl />
             </div>
           )}
         </div>

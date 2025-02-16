@@ -1,9 +1,8 @@
-interface TextInputProps {
-  overlayText: string;
-  onTextChange: (text: string) => void;
-}
+import { useApp } from "../context/AppContext";
 
-export function TextInput({ overlayText, onTextChange }: TextInputProps) {
+export function TextInput() {
+  const { overlayText, setOverlayText } = useApp();
+
   return (
     <div>
       <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -12,7 +11,7 @@ export function TextInput({ overlayText, onTextChange }: TextInputProps) {
       <input
         type="text"
         value={overlayText}
-        onChange={(e) => onTextChange(e.target.value)}
+        onChange={(e) => setOverlayText(e.target.value)}
         className="w-full p-2 border rounded"
         placeholder="Enter optional text to overlay"
       />

@@ -1,30 +1,19 @@
 import { useRef, useEffect, useCallback } from "react";
+import { useApp } from "../context/AppContext";
 
-interface ImagePreviewProps {
-  selectedImage: string | null;
-  setSelectedImage: (image: string) => void;
-  overlayText: string;
-  fontSize: string;
-  overlayOpacity: string;
-  selectedFont: string;
-  wrappedLines: string[];
-  onWrappedLinesChange: (lines: string[]) => void;
-  svgContent: string | null;
-  svgSize: string;
-}
+export function ImagePreview() {
+  const {
+    selectedImage,
+    overlayText,
+    fontSize,
+    overlayOpacity,
+    selectedFont,
+    wrappedLines,
+    setWrappedLines,
+    svgContent,
+    svgSize,
+  } = useApp();
 
-export function ImagePreview({
-  selectedImage,
-  setSelectedImage,
-  overlayText,
-  fontSize,
-  overlayOpacity,
-  selectedFont,
-  wrappedLines,
-  onWrappedLinesChange,
-  svgContent,
-  svgSize,
-}: ImagePreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
@@ -51,57 +40,6 @@ export function ImagePreview({
     },
     []
   );
-
-  // Effect for loading the image
-  useEffect(() => {
-    if (!selectedImage) return;
-
-    const img = new Image();
-    imageRef.current = img;
-    img.src = selectedImage;
-
-    const handleLoad = () => {
-      if (!canvasRef.current) return;
-      canvasRef.current.width = img.naturalWidth;
-      canvasRef.current.height = img.naturalHeight;
-
-      // Calculate wrapped lines after image is loaded and canvas is sized
-      const ctx = canvasRef.current.getContext("2d");
-      if (!ctx) return;
-
-      const calculatedFontSize = Math.floor(
-        (canvasRef.current.height * parseInt(fontSize)) / 400
-      );
-      ctx.font = `${calculatedFontSize}px ${selectedFont}`;
-
-      const maxWidth = canvasRef.current.width * 0.8;
-      const lines = overlayText.trim()
-        ? wrapText(ctx, overlayText, maxWidth)
-        : [];
-      onWrappedLinesChange(lines);
-
-      // Trigger initial render
-      renderCanvas();
-    };
-
-    if (img.complete) {
-      handleLoad();
-    } else {
-      img.onload = handleLoad;
-    }
-
-    return () => {
-      img.onload = null;
-      imageRef.current = null;
-    };
-  }, [
-    selectedImage,
-    fontSize,
-    selectedFont,
-    overlayText,
-    wrapText,
-    onWrappedLinesChange,
-  ]);
 
   // Effect for rendering the canvas
   const renderCanvas = useCallback(async () => {
@@ -224,6 +162,61 @@ export function ImagePreview({
     overlayText,
   ]);
 
+  // Effect for loading the image
+  useEffect(() => {
+    if (!selectedImage) return;
+
+    const img = new Image();
+    imageRef.current = img;
+    img.src = selectedImage;
+
+    const handleLoad = () => {
+      if (!canvasRef.current) return;
+      canvasRef.current.width = img.naturalWidth;
+      canvasRef.current.height = img.naturalHeight;
+
+      // Calculate wrapped lines after image is loaded and canvas is sized
+      const ctx = canvasRef.current.getContext("2d");
+      if (!ctx) return;
+
+      const calculatedFontSize = Math.floor(
+        (canvasRef.current.height * parseInt(fontSize)) / 400
+      );
+      ctx.font = `${calculatedFontSize}px ${selectedFont}`;
+
+      const maxWidth = canvasRef.current.width * 0.8;
+      const lines = overlayText.trim()
+        ? wrapText(ctx, overlayText, maxWidth)
+        : [];
+      setWrappedLines(lines);
+
+      // Trigger initial render
+      renderCanvas();
+    };
+
+    if (img.complete) {
+      handleLoad();
+    } else {
+      img.onload = handleLoad;
+    }
+
+    return () => {
+      img.onload = null;
+      imageRef.current = null;
+    };
+  }, [
+    selectedImage,
+    fontSize,
+    selectedFont,
+    overlayText,
+    wrapText,
+    setWrappedLines,
+    overlayOpacity,
+    svgContent,
+    svgSize,
+    renderCanvas,
+  ]);
+
   // Effect to trigger re-render when dependencies change
   useEffect(() => {
     renderCanvas();
@@ -250,20 +243,17 @@ export function ImagePreview({
           <canvas ref={canvasRef} className="w-full h-full object-contain" />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
-            <div className="text-center p-8">
-              <p className="text-gray-500">No image selected yet</p>
-            </div>
+            <p className="text-gray-500">No image selected</p>
           </div>
         )}
       </div>
-
       {selectedImage && (
         <div className="mt-4">
           <button
             onClick={handleDownload}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
           >
-            Download Edited Image
+            Download Image
           </button>
         </div>
       )}
