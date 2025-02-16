@@ -8,7 +8,7 @@ import { FontSizeControl } from "./FontSizeControl";
 import { OpacityControl } from "./OpacityControl";
 
 interface ConfigurationStepsProps {
-  onImageUpload: (image: string) => void;
+  onImageUpload: (image: string | null) => void;
   selectedImage: string | null;
   onSvgUpload: (svg: string | null) => void;
   svgContent: string | null;
@@ -52,7 +52,10 @@ export function ConfigurationSteps({
       title: "1. Choose Your Image & Opacity",
       content: (
         <div className="space-y-4">
-          <ImageUpload onImageUpload={onImageUpload} />
+          <ImageUpload
+            onImageUpload={onImageUpload}
+            selectedImage={selectedImage}
+          />
           {selectedImage && (
             <div className="border-t pt-4">
               <OpacityControl
