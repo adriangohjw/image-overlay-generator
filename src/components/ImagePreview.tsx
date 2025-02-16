@@ -139,37 +139,61 @@ export function ImagePreview({
       const svgWidth = svgImg.width * scale;
       const svgHeight = svgImg.height * scale;
       const svgX = (canvas.width - svgWidth) / 2;
-      const svgY = canvas.height * 0.25 - svgHeight / 2; // 25% from top
 
-      ctx.drawImage(svgImg, svgX, svgY, svgWidth, svgHeight);
-      URL.revokeObjectURL(svgUrl);
-    }
-
-    // Add text
-    ctx.fillStyle = "#FFFFFF";
-    const calculatedFontSize = Math.floor(
-      (canvas.height * parseInt(fontSize)) / 400
-    );
-    ctx.font = `${calculatedFontSize}px ${selectedFont}`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    // Calculate line height and total height
-    const lineHeight = calculatedFontSize * 1.2;
-    const totalHeight = wrappedLines.length * lineHeight;
-
-    // Draw each line (adjusted position if SVG is present)
-    const startY = svgContent
-      ? (canvas.height - totalHeight) / 2 + canvas.height * 0.1 // Move text down when SVG is present
-      : (canvas.height - totalHeight) / 2;
-
-    wrappedLines.forEach((line, index) => {
-      ctx.fillText(
-        line,
-        canvas.width / 2,
-        startY + index * lineHeight + lineHeight / 2
+      // Add text style configuration
+      ctx.fillStyle = "#FFFFFF";
+      const calculatedFontSize = Math.floor(
+        (canvas.height * parseInt(fontSize)) / 400
       );
-    });
+      ctx.font = `${calculatedFontSize}px ${selectedFont}`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      // Calculate text dimensions
+      const lineHeight = calculatedFontSize * 1.2;
+      const totalTextHeight = wrappedLines.length * lineHeight;
+
+      // Calculate dynamic positions with gap
+      const gap = calculatedFontSize * 1.5; // Dynamic gap based on font size
+      const combinedHeight = svgHeight + gap + totalTextHeight;
+      const verticalStartPosition = (canvas.height - combinedHeight) / 2;
+
+      // Draw SVG at calculated position
+      ctx.drawImage(svgImg, svgX, verticalStartPosition, svgWidth, svgHeight);
+      URL.revokeObjectURL(svgUrl);
+
+      // Draw text below SVG with gap
+      wrappedLines.forEach((line, index) => {
+        const textY =
+          verticalStartPosition +
+          svgHeight +
+          gap +
+          index * lineHeight +
+          lineHeight / 2;
+        ctx.fillText(line, canvas.width / 2, textY);
+      });
+    } else {
+      // Add text style configuration
+      ctx.fillStyle = "#FFFFFF";
+      const calculatedFontSize = Math.floor(
+        (canvas.height * parseInt(fontSize)) / 400
+      );
+      ctx.font = `${calculatedFontSize}px ${selectedFont}`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      // Calculate text position when no SVG
+      const lineHeight = calculatedFontSize * 1.2;
+      const totalHeight = wrappedLines.length * lineHeight;
+      const verticalStartPosition = (canvas.height - totalHeight) / 2;
+
+      // Draw centered text when no SVG
+      wrappedLines.forEach((line, index) => {
+        const textY =
+          verticalStartPosition + index * lineHeight + lineHeight / 2;
+        ctx.fillText(line, canvas.width / 2, textY);
+      });
+    }
   }, [
     selectedFont,
     fontSize,
