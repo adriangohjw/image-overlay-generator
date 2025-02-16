@@ -1,7 +1,8 @@
 import { useRef, useEffect, useCallback } from "react";
 
 interface ImagePreviewProps {
-  selectedImage: string;
+  selectedImage: string | null;
+  setSelectedImage: (image: string) => void;
   overlayText: string;
   fontSize: string;
   overlayOpacity: string;
@@ -14,6 +15,7 @@ interface ImagePreviewProps {
 
 export function ImagePreview({
   selectedImage,
+  setSelectedImage,
   overlayText,
   fontSize,
   overlayOpacity,
@@ -52,6 +54,8 @@ export function ImagePreview({
 
   // Effect for loading the image
   useEffect(() => {
+    if (!selectedImage) return;
+
     const img = new Image();
     imageRef.current = img;
     img.src = selectedImage;
@@ -242,17 +246,27 @@ export function ImagePreview({
   return (
     <>
       <div className="relative w-full aspect-video">
-        <canvas ref={canvasRef} className="w-full h-full object-contain" />
+        {selectedImage ? (
+          <canvas ref={canvasRef} className="w-full h-full object-contain" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
+            <div className="text-center p-8">
+              <p className="text-gray-500">No image selected yet</p>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="mt-4">
-        <button
-          onClick={handleDownload}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors"
-        >
-          Download Edited Image
-        </button>
-      </div>
+      {selectedImage && (
+        <div className="mt-4">
+          <button
+            onClick={handleDownload}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors"
+          >
+            Download Edited Image
+          </button>
+        </div>
+      )}
     </>
   );
 }

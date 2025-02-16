@@ -42,8 +42,16 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
     }
   };
 
+  const handleTrySampleImage = () => {
+    const img = new Image();
+    img.src = "/src/assets/default-image.png";
+    img.onload = () => {
+      onImageUpload(img.src);
+    };
+  };
+
   return (
-    <div>
+    <div className="space-y-4">
       <label className="block text-gray-700 text-sm font-bold mb-2">
         Upload Image
       </label>
@@ -88,6 +96,23 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
           </div>
         </div>
       </div>
+
+      <div className="text-center">
+        <span className="text-gray-500 text-sm">or</span>
+      </div>
+
+      <button
+        onClick={handleTrySampleImage}
+        className="w-full bg-blue-600 border-2 border-blue-600 hover:bg-blue-700 hover:border-blue-700 text-white font-bold py-2 px-4 rounded transition-colors inline-flex items-center justify-center gap-2"
+      >
+        <span role="img" aria-label="sparkles">
+          ✨
+        </span>
+        Try with sample image
+        <span role="img" aria-label="sparkles">
+          ✨
+        </span>
+      </button>
     </div>
   );
 }

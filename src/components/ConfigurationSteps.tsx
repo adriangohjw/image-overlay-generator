@@ -9,7 +9,7 @@ import { OpacityControl } from "./OpacityControl";
 
 interface ConfigurationStepsProps {
   onImageUpload: (image: string) => void;
-  selectedImage: string;
+  selectedImage: string | null;
   onSvgUpload: (svg: string | null) => void;
   svgContent: string | null;
   svgSize: string;

@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { ImagePreview } from "./components/ImagePreview";
-import defaultImage from "./assets/default-image.png";
 import { fonts } from "./constants/Fonts";
 import { FeaturesShowcase } from "./components/FeaturesShowcase";
 import { Footer } from "./components/Footer";
 import { ConfigurationSteps } from "./components/ConfigurationSteps";
 
 function App() {
-  const [selectedImage, setSelectedImage] = useState<string>(defaultImage);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [overlayText, setOverlayText] = useState<string>("");
   const [fontSize, setFontSize] = useState<string>("28");
   const [wrappedLines, setWrappedLines] = useState<string[]>([]);
@@ -49,6 +48,7 @@ function App() {
             <div className="w-full md:w-2/3">
               <ImagePreview
                 selectedImage={selectedImage}
+                setSelectedImage={setSelectedImage}
                 overlayText={overlayText}
                 fontSize={fontSize}
                 overlayOpacity={overlayOpacity}
