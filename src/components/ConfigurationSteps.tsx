@@ -52,7 +52,6 @@ export function ConfigurationSteps({
         <div className="space-y-4">
           <ImageUpload onImageUpload={onImageUpload} />
           <div className="border-t pt-4">
-            <p className="text-sm text-gray-600 mb-2">Adjust Image Opacity</p>
             <OpacityControl
               overlayOpacity={overlayOpacity}
               onOpacityChange={onOpacityChange}
@@ -67,7 +66,6 @@ export function ConfigurationSteps({
         <div className="space-y-4">
           <TextInput overlayText={overlayText} onTextChange={onTextChange} />
           <div className="border-t pt-4">
-            <p className="text-sm text-gray-600 mb-2">Text Styling</p>
             <div className="space-y-4">
               <FontSelector
                 selectedFont={selectedFont}
@@ -87,15 +85,12 @@ export function ConfigurationSteps({
       content: (
         <div className="space-y-4">
           <SvgUpload onSvgUpload={onSvgUpload} />
-          {svgContent && (
-            <div className="mt-4">
-              <p className="text-sm text-gray-600 mb-2">Adjust SVG Size</p>
-              <SvgSizeControl
-                svgSize={svgSize}
-                onSvgSizeChange={onSvgSizeChange}
-              />
-            </div>
-          )}
+          <div className="border-t pt-4">
+            <SvgSizeControl
+              svgSize={svgSize}
+              onSvgSizeChange={onSvgSizeChange}
+            />
+          </div>
         </div>
       ),
     },
